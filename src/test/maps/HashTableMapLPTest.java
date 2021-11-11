@@ -1,8 +1,11 @@
 
-package maps;
+package test.maps;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import maps.Entry;
+import maps.HashTableMapLP;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -10,10 +13,10 @@ import static org.junit.Assert.*;
  *
  * @author mayte
  */
-public class HashTableMapDHTest {
-   
-    private HashTableMapDH<String,Integer> instance;
-    public HashTableMapDHTest() {
+public class HashTableMapLPTest {
+    
+    private HashTableMapLP<String,Integer> instance;
+    public HashTableMapLPTest() {
     }
 
     /**
@@ -22,7 +25,7 @@ public class HashTableMapDHTest {
     @Test
     public void testSize() {
         System.out.println("size");
-        instance = new HashTableMapDH<>();
+        instance = new HashTableMapLP<>();
         assertEquals(instance.size(),0);
         
         instance.put("Jose", 912127659);
@@ -42,7 +45,7 @@ public class HashTableMapDHTest {
     @Test
     public void testIsEmpty() {
         System.out.println("isEmpty");
-        instance = new HashTableMapDH<>();
+        instance = new HashTableMapLP<>();
         assertTrue(instance.isEmpty());
         instance.put("Jose", 912127654);
         assertFalse(instance.isEmpty());
@@ -55,7 +58,7 @@ public class HashTableMapDHTest {
      */
     @Test
     public void testPutAndGet() {
-        instance = new HashTableMapDH<>();
+        instance = new HashTableMapLP<>();
 
         try {
             instance.get(null);
@@ -93,7 +96,7 @@ public class HashTableMapDHTest {
     @Test
     public void testRemove() {
         System.out.println("remove");
-        instance = new HashTableMapDH<>();
+        instance = new HashTableMapLP<>();
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
         instance.remove("Andres");
@@ -118,7 +121,7 @@ public class HashTableMapDHTest {
     @Test
     public void testKeys() {
         System.out.println("keys");
-        instance = new HashTableMapDH<>();
+        instance = new HashTableMapLP<>();
         instance.put("Angel", 912127654);
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
@@ -146,7 +149,7 @@ public class HashTableMapDHTest {
     @Test
     public void testValues() {
         System.out.println("values");
-        instance = new HashTableMapDH<>();
+        instance = new HashTableMapLP<>();
         instance.put("Angel", 912127654);
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
@@ -171,7 +174,7 @@ public class HashTableMapDHTest {
     @Test
     public void testEntries() {
         System.out.println("entries");
-        instance = new HashTableMapDH<>();
+        instance = new HashTableMapLP<>();
         instance.put("Angel", 912127654);
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
@@ -201,7 +204,7 @@ public class HashTableMapDHTest {
     @SuppressWarnings("deprecation")
     public void testRehash() {
         System.out.println("rehash");
-        HashTableMapDH<Integer,Integer> listin1 = new HashTableMapDH<>(10);
+        HashTableMapLP<Integer,Integer> listin1 = new HashTableMapLP<>(10);
         final int NUM_ENTRIES = 1000;
 
         // Testing size

@@ -1,8 +1,11 @@
 
-package maps;
+package test.maps;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import maps.Entry;
+import maps.HashTableMapDH;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -10,18 +13,19 @@ import static org.junit.Assert.*;
  *
  * @author mayte
  */
-public class HashTableMapQPTest {
-    private HashTableMapQP<String,Integer> instance;
-    public HashTableMapQPTest() {
+public class HashTableMapDHTest {
+   
+    private HashTableMapDH<String,Integer> instance;
+    public HashTableMapDHTest() {
     }
 
-   /**
+    /**
      * Test of size method, of class HashTableMapSC.
      */
     @Test
     public void testSize() {
         System.out.println("size");
-        instance = new HashTableMapQP<>();
+        instance = new HashTableMapDH<>();
         assertEquals(instance.size(),0);
         
         instance.put("Jose", 912127659);
@@ -41,7 +45,7 @@ public class HashTableMapQPTest {
     @Test
     public void testIsEmpty() {
         System.out.println("isEmpty");
-        instance = new HashTableMapQP<>();
+        instance = new HashTableMapDH<>();
         assertTrue(instance.isEmpty());
         instance.put("Jose", 912127654);
         assertFalse(instance.isEmpty());
@@ -54,7 +58,7 @@ public class HashTableMapQPTest {
      */
     @Test
     public void testPutAndGet() {
-        instance = new HashTableMapQP<>();
+        instance = new HashTableMapDH<>();
 
         try {
             instance.get(null);
@@ -92,7 +96,7 @@ public class HashTableMapQPTest {
     @Test
     public void testRemove() {
         System.out.println("remove");
-        instance = new HashTableMapQP<>();
+        instance = new HashTableMapDH<>();
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
         instance.remove("Andres");
@@ -117,7 +121,7 @@ public class HashTableMapQPTest {
     @Test
     public void testKeys() {
         System.out.println("keys");
-        instance = new HashTableMapQP<>();
+        instance = new HashTableMapDH<>();
         instance.put("Angel", 912127654);
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
@@ -145,7 +149,7 @@ public class HashTableMapQPTest {
     @Test
     public void testValues() {
         System.out.println("values");
-        instance = new HashTableMapQP<>();
+        instance = new HashTableMapDH<>();
         instance.put("Angel", 912127654);
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
@@ -170,7 +174,7 @@ public class HashTableMapQPTest {
     @Test
     public void testEntries() {
         System.out.println("entries");
-        instance = new HashTableMapQP<>();
+        instance = new HashTableMapDH<>();
         instance.put("Angel", 912127654);
         instance.put("Jose", 912127651);
         instance.put("Andres", 912127624);
@@ -200,7 +204,7 @@ public class HashTableMapQPTest {
     @SuppressWarnings("deprecation")
     public void testRehash() {
         System.out.println("rehash");
-        HashTableMapQP<Integer,Integer> listin1 = new HashTableMapQP<>(10);
+        HashTableMapDH<Integer,Integer> listin1 = new HashTableMapDH<>(10);
         final int NUM_ENTRIES = 1000;
 
         // Testing size
@@ -211,5 +215,5 @@ public class HashTableMapQPTest {
         assertTrue(listin1.get(125).equals(125));
         
     }
-     
+    
 }
