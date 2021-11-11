@@ -78,7 +78,7 @@ public class MyDictionaryTest {
         
         
 
-        Entry<String, String> jose = instance.insert("Jose", "912127654");
+        Entry<String, String> jose = instance.insert("jose", "912127654");
         Entry<String, String> mayte = instance.insert("Mayte", "912127651");
         Entry<String, String> andres = instance.insert("Andres", "912127624");
         assertEquals(instance.size(), 3);

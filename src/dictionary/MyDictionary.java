@@ -1,7 +1,10 @@
 
 package dictionary;
 
+import javax.management.openmbean.InvalidKeyException;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -10,7 +13,17 @@ import java.util.Iterator;
  * @param <V>
  */
 public class MyDictionary<K,V> implements Dictionary<K,V> {
-    
+
+    List<Entry<K,V>>[] tabla;
+    int cap;
+    int size;
+
+    public MyDictionary(){
+        cap=20;
+        size=0;
+        tabla= new List[20];
+    }
+
     /**
      * @param <T> Key type
      * @param <U> Value type
@@ -92,42 +105,94 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
      * @return
      */
     private int hashValue(K key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (key.hashCode()%cap);
     }
     
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.size;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.size==0;
     }
 
     @Override
     public Entry<K, V> insert(K key, V value) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = this.hashValue(key);
+        if(this.tabla[index]==null){
+            this.tabla[index]=new LinkedList<>();
+        }
+        Entry<K,V> entrada = new HashEntry<>(key,value);
+        tabla[index].add(entrada);
+        size++;
+        if(size/cap > 0.75){
+            rehash();
+        }
+        return entrada;
     }
 
     @Override
     public Entry<K, V> find(K key) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(key==null){
+            throw new InvalidKeyException();
+        }
+        Entry<K,V> sol = null;
+        int index = this.hashValue(key);
+        if(this.tabla[index]==null){
+            return sol;
+        }
+        for(Entry s : this.tabla[index]){
+            if(s.getKey().equals(key)){
+                sol=s;
+                break;
+            }
+        }
+        return sol;
     }
 
     @Override
     public Iterable<Entry<K, V>> findAll(K key) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Entry<K,V>> sol = new LinkedList<>();
+        int index = this.hashValue(key);
+        if(this.tabla[index]==null){
+            return sol;
+        }
+        for(Entry s : this.tabla[index]){
+            if(s.getKey().equals(key)){
+                sol.add(s);
+                break;
+            }
+        }
+        return sol;
     }
 
     @Override
     public Entry<K, V> remove(Entry<K, V> e) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Entry<K,V> sol = null;
+        int index = this.hashValue(e.getKey());
+        if(this.tabla[index]==null){
+            return sol;
+        }
+        if(this.tabla[index].remove(e)){
+            sol=e;
+        }
+        size--;
+        return sol;
+
     }
 
     @Override
     public Iterable<Entry<K, V>> entries() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Entry<K,V>> lista = new LinkedList<>();
+        for(int i=0;i<cap;i++){
+            if(this.tabla[i]==null)continue;
+            for(Entry<K,V> s : this.tabla[i]){
+                lista.add(s);
+            }
+        }
+        return lista;
     }
     
     @Override
@@ -138,6 +203,20 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
      * Doubles the size of the hash table and rehashes all the entries.
      */
     private void rehash() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int lastcap=cap;
+        cap=cap*2;
+        List<Entry<K,V>>[] nueva = new LinkedList[cap];
+        for(int i=0;i<lastcap;i++){
+            if(tabla[i]==null)continue;
+            for(Entry<K,V> s: tabla[i]){
+                int index = this.hashValue(s.getKey());
+                if(nueva[index]==null){
+                    nueva[index]=new LinkedList<>();
+                }
+                nueva[index].add(s);
+            }
+        }
+        this.tabla=nueva;
+
     }
 }
