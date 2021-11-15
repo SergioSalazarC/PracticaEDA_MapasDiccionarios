@@ -24,10 +24,10 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
      * @param <U> Value type
      *
      */
-    private class HashEntry<T, U> implements Entry<T, U> {
+    public class HashEntry<T, U> implements Entry<T, U> {
 
-        protected T key;
-        protected U value;
+        private T key;
+        private U value;
 
         public HashEntry(T k, U v) {
             key = k;
@@ -44,7 +44,7 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
             return key;
         }
 
-        public U setValue(U val) {
+        private U setValue(U val) {
             U oldValue = value;
             value = val;
             return oldValue;
@@ -243,10 +243,22 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
         return (n == 0);
     }
     
-    abstract protected int offset(int hashKey, int p);
+    abstract protected int offset(int hashKey, int longitud, int numprueb, int hashKeyAux);
+
+
 
     protected HashEntryIndex findEntry(K key) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not yet implemented");
+        int index=hashValue(key);
+        int indexwc=index;
+        int i=0;
+        while(true){
+            if(bucket[index].getKey()==key){
+                return new HashEntryIndex(index,true);
+            }
+            index=offset(index,bucket.length,++i, hashValueAux(key));
+            if(index==indexwc) break;
+        }
+        return new HashEntryIndex(indexwc,false);
     }
 
     /**
@@ -257,7 +269,20 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
      */
     @Override
     public V get(K key) throws IllegalStateException {
-       throw new UnsupportedOperationException("Not yet implemented");
+        if(key==null){
+            throw new IllegalStateException();
+        }
+        int index=hashValue(key);
+        int indexwc=index;
+        int i=0;
+        while(true){
+            if(bucket[index]!=null && bucket[index].getKey().equals(key)){
+                return bucket[index].getValue();
+            }
+            index=offset(index,bucket.length,++i, hashValueAux(key));
+            if(index==indexwc) break;
+        }
+        return null;
     }
 
     /**
@@ -269,7 +294,27 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
      */
     @Override
     public V put(K key, V value) throws IllegalStateException {
-       throw new UnsupportedOperationException("Not yet implemented");
+        V dev=null;
+        int index= hashValue(key);
+        int i=0;
+        while(true){
+            //Sabemos que el bucle terminara pues nos aseguramos que el factor de carga es menor a 0.5
+            if(bucket[index]==null){
+                bucket[index]=new HashEntry<K,V>(key,value);
+                dev=value;
+                this.n++;
+                break;
+            }
+            else if(bucket[index].getKey().equals(key)){
+                bucket[index].setValue(value);
+                dev=value;
+                break;
+            }
+            index=offset(index,bucket.length,++i, hashValueAux(key));
+        }
+
+        if(2*n>capacity) rehash();
+        return dev;
     }
 
     /**
@@ -280,7 +325,24 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
      */
     @Override
     public V remove(K key) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(key==null){
+            throw new IllegalStateException();
+        }
+        V dev=null;
+        int index=hashValue(key);
+        int indexwc=index;
+        int i=0;
+        while(true){
+            if(bucket[index]!=null && bucket[index].getKey().equals(key)){
+                dev = bucket[index].getValue();
+                bucket[index]=null;
+                n--;
+                break;
+            }
+            index=offset(index,bucket.length,++i, hashValueAux(key));
+            if(index==indexwc) break;
+        }
+        return dev;
     }
 
     @Override
@@ -350,18 +412,32 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
      * @return
      */
     protected int hashValue(K key) {
-        return (int) (Math.abs(key.hashCode() * scale + shift) % prime);
+        return (int) ((Math.abs(key.hashCode() * scale + shift) % prime)%capacity);
+    }
+
+    protected int hashValueAux(K key) {
+        return (int) ((Math.abs(key.hashCode() * scale+1 + shift-1) % 104729)%capacity);
     }
 
     /**
      * Doubles the size of the hash table and rehashes all the entries.
      */
     protected void rehash() {
-        
+        rehash(capacity*2);
     }
 
     protected void rehash(int newcap) {
-        
+        int oldn=n;
+        int oldcap = this.capacity;
+        HashEntry<K,V>[] old = this.bucket;
+        this.bucket = new HashEntry[newcap];
+        capacity=newcap;
+        for(int i=0;i<oldcap;i++){
+            if(old[i]!=null){
+                put(old[i].getKey(),old[i].getValue());
+            }
+        }
+        n=oldn;
     }
 
 }

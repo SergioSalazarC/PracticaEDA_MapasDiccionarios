@@ -1,5 +1,7 @@
 package maps;
 
+import java.security.InvalidKeyException;
+
 /**
  * @param <K> The hey
  * @param <V> The stored value
@@ -23,8 +25,16 @@ public class HashTableMapLP<K, V> extends AbstractHashTableMap<K, V> {
     }
 
     @Override
-    protected int offset(int hashKey, int i) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected int offset(int hashKey, int longitud, int a, int q) {
+        return (hashKey+1)%longitud;
     }
+
+
+
+
+
+
+
+
 
 }

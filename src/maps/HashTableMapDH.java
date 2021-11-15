@@ -21,7 +21,7 @@ public class HashTableMapDH<K, V> extends AbstractHashTableMap<K, V> {
     }
 
     @Override
-    protected int offset(int hashKey, int p) {
-       throw new UnsupportedOperationException("Not yet implemented");
+    protected int offset(int hashKey,int longitud, int numprueb, int hashKeyAux) {
+        return (hashKey+numprueb*hashKeyAux)%longitud;
     }
 }

@@ -206,11 +206,12 @@ public class HashTableMapDHTest {
         System.out.println("rehash");
         HashTableMapDH<Integer,Integer> listin1 = new HashTableMapDH<>(10);
         final int NUM_ENTRIES = 1000;
-
+        System.out.println("hola");
         // Testing size
         for (int cont = 0; cont < NUM_ENTRIES; cont++) {
             listin1.put(cont, cont);
         }
+        System.out.println("hola");
         assertEquals(listin1.size(), NUM_ENTRIES);
         assertTrue(listin1.get(125).equals(125));
         
