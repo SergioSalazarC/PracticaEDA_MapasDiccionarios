@@ -30,8 +30,9 @@ public class OrganizeTest {
         l.add(new Pair<>("Los Angeles","Las Vegas"));
         l.add(new Pair<>("Orlando","New York"));
         l.add(new Pair<>("Las Vegas","Orlando"));
+        l.add(new Pair<>("Boston","Cansas"));
         Organize instance = new Organize(l);
-        List<String> expResult = Arrays.asList("Los Angeles","Las Vegas","Orlando","New York","Boston");
+        List<String> expResult = Arrays.asList("Los Angeles","Las Vegas","Orlando","New York","Boston","Cansas");
         List<String> result = instance.itineratio();
         assertEquals(expResult, result);
     }
